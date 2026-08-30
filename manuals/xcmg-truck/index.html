@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#005cbf">
+<link rel="manifest" href="../../manifest.json">
+<title>徐工电动重卡维修手册 | 二勇知识库</title>
+<style>
+:root{
+  --primary:#005cbf;--primary-dark:#003d7a;--primary-light:#e8f1fc;
+  --accent:#e63900;--success:#1b8a3a;--success-light:#e8f7ed;
+  --warning:#c77700;--warning-light:#fff8e8;--danger:#cc1f1a;--danger-light:#fdeaea;
+  --text:#1a1a2e;--text-2:#666;--text-3:#999;
+  --bg:#f0f2f5;--card:#fff;--border:#e8eaed;
+  --shadow:0 1px 4px rgba(0,0,0,0.08);
+  --radius:12px;
+  --tab-h:56px;
+  --header-h:52px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:"Microsoft YaHei","Noto Sans CJK SC","PingFang SC",-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+/* App shell */
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+/* Header */
+.app-header{
+  height:var(--header-h);flex-shrink:0;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:10;padding:0 16px;
+  padding-top:env(safe-area-inset-top);
+}
+.app-header h1{font-size:17px;font-weight:600;letter-spacing:.5px}
+.app-header .back-btn{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  font-size:22px;color:#fff;background:none;border:none;cursor:pointer;
+  padding:4px 8px;line-height:1;display:none;
+}
+.app-header .back-btn.show{display:block}
+.app-header .search-btn{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:18px;color:#fff;background:none;border:none;cursor:pointer;padding:4px 8px;
+}
+/* Content area */
+.app-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.page{display:none;min-height:100%}
+.page.active{display:block}
+/* Bottom tab bar */
+.tab-bar{
+  height:var(--tab-h);flex-shrink:0;background:var(--card);
+  border-top:1px solid var(--border);display:flex;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tab-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;color:var(--text-3);font-size:11px;cursor:pointer;transition:color .2s;
+  border:none;background:none;
+}
+.tab-item.active{color:var(--primary)}
+.tab-icon{font-size:20px;line-height:1}
+/* ===== Home page ===== */
+.home-banner{
+  background:linear-gradient(135deg,#1a2744,#005cbf);color:#fff;
+  padding:24px 20px 28px;text-align:center;position:relative;overflow:hidden;
+}
+.home-banner::after{
+  content:"";position:absolute;bottom:-30px;right:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(255,255,255,0.06);
+}
+.home-banner .truck-icon{font-size:40px;margin-bottom:8px}
+.home-banner h2{font-size:20px;margin-bottom:4px}
+.home-banner p{font-size:12px;color:#a0b8e0}
+.quick-search{
+  margin:-20px 16px 16px;background:var(--card);border-radius:var(--radius);
+  box-shadow:0 2px 12px rgba(0,0,0,0.1);padding:12px 16px;
+  display:flex;align-items:center;gap:8px;position:relative;z-index:2;
+}
+.quick-search input{
+  flex:1;border:none;outline:none;font-size:14px;background:none;color:var(--text);
+}
+.quick-search .search-icon{font-size:18px;color:var(--text-3)}
+.section-title{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;margin:20px 0 12px;
+}
+.section-title h3{font-size:16px;color:var(--text)}
+.section-title .more{font-size:12px;color:var(--primary);cursor:pointer}
+/* Quick access grid */
+.quick-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  padding:0 16px;margin-bottom:8px;
+}
+.quick-item{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 4px;background:var(--card);border-radius:10px;
+  cursor:pointer;transition:transform .15s;box-shadow:var(--shadow);
+}
+.quick-item:active{transform:scale(0.95)}
+.quick-item .qi-icon{font-size:24px}
+.quick-item .qi-label{font-size:11px;color:var(--text-2);text-align:center}
+/* Chapter list */
+.chapter-list{padding:0 16px}
+.chapter-card{
+  background:var(--card);border-radius:var(--radius);margin-bottom:10px;
+  overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s;
+}
+.chapter-card:active{transform:scale(0.98)}
+.chapter-header{
+  display:flex;align-items:center;padding:14px 16px;gap:12px;
+}
+.chapter-num{
+  width:36px;height:36px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;color:#fff;
+}
+.chapter-info{flex:1;min-width:0}
+.chapter-info .ci-title{font-size:15px;font-weight:600;color:var(--text)}
+.chapter-info .ci-desc{font-size:12px;color:var(--text-3);margin-top:2px}
+.chapter-arrow{color:var(--text-3);font-size:18px;flex-shrink:0}
+.chapter-sublist{display:none;padding:0 16px 8px 52px}
+.chapter-card.open .chapter-sublist{display:block}
+.chapter-sub-item{
+  padding:8px 0;font-size:13px;color:var(--text-2);
+  border-bottom:1px solid var(--border);cursor:pointer;
+}
+.chapter-sub-item:last-child{border-bottom:none}
+.chapter-sub-item:active{color:var(--primary)}
+/* ===== Content page ===== */
+.content-wrap{padding:16px}
+.content-wrap h2{
+  font-size:20px;color:var(--primary-dark);margin-bottom:12px;
+  padding-bottom:8px;border-bottom:2px solid var(--primary);
+}
+.content-wrap h3{font-size:17px;color:var(--primary-dark);margin:20px 0 10px}
+.content-wrap h4{font-size:15px;margin:16px 0 8px;font-weight:600}
+.content-wrap p{margin-bottom:10px;font-size:14px;color:var(--text)}
+.content-wrap ul{margin:8px 0 12px 20px}
+.content-wrap li{margin-bottom:4px;font-size:14px}
+/* Callout */
+.callout{
+  padding:12px 14px;border-radius:8px;margin:12px 0;
+  border-left:3px solid;font-size:13px;line-height:1.7;
+}
+.callout .co-title{font-weight:700;margin-bottom:6px;font-size:14px}
+.callout-danger{background:var(--danger-light);border-color:var(--danger)}
+.callout-danger .co-title{color:var(--danger)}
+.callout-warning{background:var(--warning-light);border-color:var(--warning)}
+.callout-warning .co-title{color:var(--warning)}
+.callout-info{background:var(--primary-light);border-color:var(--primary)}
+.callout-info .co-title{color:var(--primary)}
+.callout-success{background:var(--success-light);border-color:var(--success)}
+.callout-success .co-title{color:var(--success)}
+/* Tables */
+.tbl-wrap{overflow-x:auto;margin:10px -16px;border-radius:0}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
+th{background:var(--primary);color:#fff;padding:8px 10px;text-align:left;font-weight:600;white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:#f8fafd}
+/* Flow */
+.flow-step{display:flex;gap:10px;margin-bottom:6px}
+.flow-num{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:var(--primary);color:#fff;display:flex;align-items:center;
+  justify-content:center;font-size:12px;font-weight:700;margin-top:2px;
+}
+.flow-step.danger .flow-num{background:var(--danger)}
+.flow-step.warning .flow-num{background:var(--warning)}
+.flow-step.success .flow-num{background:var(--success)}
+.flow-content{flex:1;padding-top:4px}
+.flow-content b{font-size:13px}
+.flow-content p{font-size:12px;color:var(--text-2);margin:2px 0}
+.flow-arrow{margin-left:14px;border-left:2px dashed var(--border);height:16px;margin-bottom:2px}
+/* Badge */
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-danger{background:var(--danger-light);color:var(--danger)}
+.badge-warning{background:var(--warning-light);color:var(--warning)}
+.badge-success{background:var(--success-light);color:var(--success)}
+.badge-info{background:var(--primary-light);color:var(--primary)}
+/* Cards */
+.info-card{
+  background:var(--card);border-radius:var(--radius);padding:14px;
+  margin-bottom:10px;box-shadow:var(--shadow);
+}
+.info-card h4{margin:0 0 6px;font-size:15px;color:var(--primary-dark)}
+.info-card p{font-size:13px;color:var(--text-2);margin:0;line-height:1.7}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
+/* Search results */
+.search-result{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.search-result:active{background:var(--primary-light)}
+.search-result .sr-title{font-size:14px;font-weight:600;color:var(--primary)}
+.search-result .sr-desc{font-size:12px;color:var(--text-3);margin-top:3px}
+.no-result{text-align:center;padding:40px 20px;color:var(--text-3)}
+/* Safety page */
+.safety-card{
+  background:var(--card);border-radius:var(--radius);overflow:hidden;
+  margin-bottom:12px;box-shadow:var(--shadow);
+}
+.safety-card .sc-header{
+  padding:12px 16px;display:flex;align-items:center;gap:10px;
+  background:var(--danger-light);color:var(--danger);font-weight:700;font-size:15px;
+}
+.safety-card .sc-body{padding:12px 16px}
+.safety-card .sc-body p{font-size:13px;color:var(--text-2);margin-bottom:6px}
+/* Profile */
+.profile-header{
+  background:linear-gradient(135deg,#1a2744,#005cbf);color:#fff;
+  padding:30px 20px;text-align:center;
+}
+.profile-header .ph-icon{font-size:48px;margin-bottom:8px}
+.profile-header h2{font-size:18px;margin-bottom:4px}
+.profile-header p{font-size:12px;color:#a0b8e0}
+.profile-menu{padding:16px}
+.profile-menu .pm-item{
+  background:var(--card);border-radius:10px;padding:14px 16px;
+  margin-bottom:8px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;box-shadow:var(--shadow);transition:transform .15s;
+}
+.profile-menu .pm-item:active{transform:scale(0.98)}
+.pm-icon{font-size:20px}
+.pm-text{flex:1;font-size:14px}
+.pm-arrow{color:var(--text-3)}
+/* Loading */
+.loading{text-align:center;padding:40px;color:var(--text-3);font-size:14px}
+/* Search overlay */
+.search-overlay{
+  position:fixed;inset:0;background:#f0f2f5;z-index:200;
+  display:none;flex-direction:column;
+}
+.search-overlay.show{display:flex}
+.search-bar{
+  display:flex;align-items:center;gap:8px;padding:8px 12px;
+  background:#fff;border-bottom:1px solid var(--border);
+  padding-top:calc(8px + env(safe-area-inset-top));
+}
+.search-bar input{
+  flex:1;padding:8px 12px;border:1px solid var(--border);
+  border-radius:8px;font-size:14px;outline:none;
+}
+.search-bar button{background:none;border:none;font-size:14px;color:var(--primary);cursor:pointer}
+.search-results{flex:1;overflow-y:auto}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- Header -->
+  <header class="app-header">
+    <button class="back-btn" id="backBtn" onclick="goBack()">‹</button>
+    <h1 id="pageTitle">徐工维修手册</h1>
+    <button class="search-btn" onclick="openSearch()">🔍</button>
+  </header>
+
+  <!-- Content -->
+  <div class="app-content" id="appContent">
+    <!-- HOME PAGE -->
+    <div class="page active" id="page-home">
+      <div class="home-banner">
+        <div class="truck-icon">🚛</div>
+        <h2>徐工电动重卡维修手册</h2>
+        <p>V1.0 | 持续更新中</p>
+      </div>
+      <div class="quick-search" onclick="openSearch()">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="搜索故障代码、关键词..." readonly>
+      </div>
+
+      <div class="section-title"><h3>快捷功能</h3></div>
+      <div class="quick-grid">
+        <div class="quick-item" onclick="showPage('fault-index')">
+          <div class="qi-icon">📋</div><div class="qi-label">故障索引</div>
+        </div>
+        <div class="quick-item" onclick="showPage('fault-codes')">
+          <div class="qi-icon">🔢</div><div class="qi-label">故障代码</div>
+        </div>
+        <div class="quick-item" onclick="navigateToContent('ch1')">
+          <div class="qi-icon">🔧</div><div class="qi-label">维修流程</div>
+        </div>
+        <div class="quick-item" onclick="showPage('safety')">
+          <div class="qi-icon">⚠️</div><div class="qi-label">安全规程</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h3>核心章节</h3>
+        <span class="more" onclick="showPage('systems')">全部 →</span>
+      </div>
+      <div class="chapter-list" id="chapterListHome"></div>
+
+      <div class="section-title"><h3>维修工具</h3></div>
+      <div class="quick-grid">
+        <div class="quick-item" onclick="navigateToContent('checklist')">
+          <div class="qi-icon">✅</div><div class="qi-label">日常检查</div>
+        </div>
+        <div class="quick-item" onclick="navigateToContent('record')">
+          <div class="qi-icon">📝</div><div class="qi-label">维修记录</div>
+        </div>
+        <div class="quick-item" onclick="navigateToContent('tools')">
+          <div class="qi-icon">🧰</div><div class="qi-label">工具清单</div>
+        </div>
+        <div class="quick-item" onclick="navigateToContent('cases')">
+          <div class="qi-icon">📖</div><div class="qi-label">维修案例</div>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+
+    <!-- SYSTEMS PAGE -->
+    <div class="page" id="page-systems">
+      <div class="content-wrap">
+        <h2>系统总览</h2>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:16px">点击各系统查看详细维修内容</p>
+        <div id="chapterListFull"></div>
+      </div>
+    </div>
+
+    <!-- FAULT INDEX PAGE -->
+    <div class="page" id="page-fault-index">
+      <div class="content-wrap">
+        <h2>快速故障索引</h2>
+        <p style="color:var(--text-2);font-size:13px">遇到故障时，通过下表快速定位排查方向。</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>故障现象</th><th>排查起点</th><th>跳转</th></tr>
+          <tr><td>无法上低压电</td><td>查24V电池/保险/显示屏</td><td onclick="navigateToContent('ch5')" style="color:var(--primary);cursor:pointer">Ch.5</td></tr>
+          <tr><td>无法上高压电</td><td>查仪表故障码</td><td onclick="navigateToContent('ch1')" style="color:var(--primary);cursor:pointer">Ch.1</td></tr>
+          <tr><td>仪表故障码</td><td>故障代码对照表</td><td onclick="showPage('fault-codes')" style="color:var(--primary);cursor:pointer">Ch.6</td></tr>
+          <tr><td>多合一报警</td><td>PDU故障诊断</td><td onclick="navigateToContent('ch2')" style="color:var(--primary);cursor:pointer">Ch.2</td></tr>
+          <tr><td>电机不转/无力</td><td>查MCU状态</td><td onclick="navigateToContent('ch3')" style="color:var(--primary);cursor:pointer">Ch.3</td></tr>
+          <tr><td>电池异常</td><td>读BMS数据</td><td onclick="navigateToContent('ch3')" style="color:var(--primary);cursor:pointer">Ch.3</td></tr>
+          <tr><td>空压机不工作</td><td>查高压供电</td><td onclick="navigateToContent('ch3')" style="color:var(--primary);cursor:pointer">Ch.3</td></tr>
+          <tr><td>转向无助力</td><td>查高压油泵</td><td onclick="navigateToContent('ch3')" style="color:var(--primary);cursor:pointer">Ch.3</td></tr>
+          <tr><td>空调不制冷</td><td>查压缩机/制冷剂</td><td onclick="navigateToContent('ch4')" style="color:var(--primary);cursor:pointer">Ch.4</td></tr>
+          <tr><td>电池温度异常</td><td>查液冷机组</td><td onclick="navigateToContent('ch4')" style="color:var(--primary);cursor:pointer">Ch.4</td></tr>
+          <tr><td>DCDC输出异常</td><td>测输出电压</td><td onclick="navigateToContent('ch2')" style="color:var(--primary);cursor:pointer">Ch.2</td></tr>
+          <tr><td>预充失败</td><td>查预充电阻</td><td onclick="navigateToContent('ch2')" style="color:var(--primary);cursor:pointer">Ch.2</td></tr>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAULT CODES PAGE -->
+    <div class="page" id="page-fault-codes">
+      <div class="content-wrap">
+        <h2>故障代码对照表</h2>
+        <p style="color:var(--text-2);font-size:13px">根据仪表显示的故障码查找排查方向。</p>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>代码</th><th>描述</th><th>系统</th><th>等级</th><th>排查</th></tr>
+          <tr><td>P0A01</td><td>高压互锁故障</td><td>BMS/PDU</td><td><span class="badge badge-danger">高</span></td><td>查高压接插件</td></tr>
+          <tr><td>P0A02</td><td>绝缘阻抗过低</td><td>BMS</td><td><span class="badge badge-danger">高</span></td><td>分段排查绝缘</td></tr>
+          <tr><td>P0A03</td><td>预充失败</td><td>PDU</td><td><span class="badge badge-danger">高</span></td><td>查预充电阻/继电器</td></tr>
+          <tr><td>P0A04</td><td>主继电器粘连</td><td>PDU</td><td><span class="badge badge-danger">高</span></td><td>更换主继电器</td></tr>
+          <tr><td>P0A0F</td><td>电池总压异常</td><td>BMS</td><td><span class="badge badge-danger">高</span></td><td>查BMS/继电器/熔断器</td></tr>
+          <tr><td>P0A1A</td><td>MCU通信故障</td><td>MCU</td><td><span class="badge badge-danger">高</span></td><td>查CAN线/供电</td></tr>
+          <tr><td>P0A1B</td><td>电机过温</td><td>MCU/电机</td><td><span class="badge badge-warning">中</span></td><td>查冷却系统</td></tr>
+          <tr><td>P0A1C</td><td>电机缺相</td><td>MCU/电机</td><td><span class="badge badge-danger">高</span></td><td>查三相线/IGBT</td></tr>
+          <tr><td>P0A2A</td><td>MCU过温</td><td>MCU</td><td><span class="badge badge-warning">中</span></td><td>查散热/冷却液</td></tr>
+          <tr><td>P0A30</td><td>DCDC输出异常</td><td>多合一</td><td><span class="badge badge-warning">中</span></td><td>查高压输入/使能</td></tr>
+          <tr><td>P0A31</td><td>DCDC过温</td><td>多合一</td><td><span class="badge badge-warning">中</span></td><td>查散热/负载</td></tr>
+          <tr><td>P0A40</td><td>电池单体过压</td><td>BMS</td><td><span class="badge badge-danger">高</span></td><td>查均衡/单体</td></tr>
+          <tr><td>P0A41</td><td>电池单体欠压</td><td>BMS</td><td><span class="badge badge-danger">高</span></td><td>查均衡/充电</td></tr>
+          <tr><td>P0A42</td><td>电池温差过大</td><td>BMS</td><td><span class="badge badge-warning">中</span></td><td>查液冷/探头</td></tr>
+          <tr><td>P0A50</td><td>SOC过低</td><td>BMS</td><td><span class="badge badge-warning">中</span></td><td>充电</td></tr>
+          <tr><td>P0A51</td><td>SOC跳变</td><td>BMS</td><td><span class="badge badge-warning">中</span></td><td>查电流传感器</td></tr>
+          <tr><td>P0A60</td><td>空压机故障</td><td>空压机</td><td><span class="badge badge-danger">高</span></td><td>查供电/控制器</td></tr>
+          <tr><td>P0A70</td><td>油泵故障</td><td>油泵</td><td><span class="badge badge-danger">高</span></td><td>查供电/油泵</td></tr>
+          <tr><td>P0A80</td><td>热管理通信故障</td><td>热管理</td><td><span class="badge badge-warning">中</span></td><td>查CAN/液冷机组</td></tr>
+          <tr><td>P0A81</td><td>液冷机组故障</td><td>热管理</td><td><span class="badge badge-warning">中</span></td><td>查压缩机/PTC/水泵</td></tr>
+          <tr><td>P0A90</td><td>充电系统故障</td><td>充电</td><td><span class="badge badge-info">低</span></td><td>查充电座/充电机</td></tr>
+          <tr><td>P0AA0</td><td>低压电压异常</td><td>低压</td><td><span class="badge badge-warning">中</span></td><td>查电池/DCDC/保险</td></tr>
+          <tr><td>P0BB0</td><td>VCU通信故障</td><td>VCU</td><td><span class="badge badge-danger">高</span></td><td>查VCU供电/CAN</td></tr>
+          <tr><td>P0BB1</td><td>显示屏故障</td><td>仪表</td><td><span class="badge badge-warning">中</span></td><td>查供电/通信</td></tr>
+        </table>
+        </div>
+        <div class="callout callout-info">
+          <div class="co-title">说明</div>
+          遇到表中未列出的故障码，请记录代码和现象反馈至技术保障部，手册将及时更新。
+        </div>
+      </div>
+    </div>
+
+    <!-- SAFETY PAGE -->
+    <div class="page" id="page-safety">
+      <div class="content-wrap">
+        <h2>安全操作规程</h2>
+        <div class="callout callout-danger">
+          <div class="co-title">⚠ 高压安全警示</div>
+          电动重卡高压系统电压可达600V以上，存在<b>致命电击危险</b>。任何高压操作必须由<b>持有高压电工证</b>的维修人员执行。
+        </div>
+
+        <h3>维修前安全准备</h3>
+        <div class="flow-step danger">
+          <div class="flow-num">1</div>
+          <div class="flow-content"><b>车辆断电休眠</b><p>关闭钥匙，等待≥5分钟，确保高压完全休眠、母线电容放电完成</p></div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-step danger">
+          <div class="flow-num">2</div>
+          <div class="flow-content"><b>断开维修开关(MSD)</b><p>佩戴绝缘手套，断开动力电池维修开关，妥善保管</p></div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-step danger">
+          <div class="flow-num">3</div>
+          <div class="flow-content"><b>验电确认</b><p>使用高压验电笔/万用表确认高压已切断，此步骤不可省略</p></div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-content"><b>悬挂警示标识</b><p>悬挂"高压维修中，禁止通电"警示牌</p></div>
+        </div>
+
+        <h3>个人防护装备</h3>
+        <div class="tbl-wrap">
+        <table>
+          <tr><th>装备</th><th>规格</th><th>检查要点</th></tr>
+          <tr><td>绝缘手套</td><td>1000V等级</td><td>使用前充气检查无漏气</td></tr>
+          <tr><td>绝缘鞋</td><td>电工等级</td><td>鞋底无破损</td></tr>
+          <tr><td>护目镜</td><td>防飞溅型</td><td>镜片完好</td></tr>
+          <tr><td>绝缘垫</td><td>1000V等级</td><td>无破损、干燥</td></tr>
+          <tr><td>防电弧服</td><td>8cal/cm²+</td><td>无破损油污</td></tr>
+        </table>
+        </div>
+
+        <h3>触电应急处理</h3>
+        <div class="callout callout-danger">
+          <div class="co-title">🚨 高压触电</div>
+          1. 立即断电（急断开关/MSD）<br>
+          2. 严禁徒手接触，用绝缘物体分离触电者<br>
+          3. 拨打120<br>
+          4. 无意识无呼吸→立即CPR<br>
+          5. 保护现场
+        </div>
+
+        <h3>电池起火应急</h3>
+        <div class="callout callout-warning">
+          <div class="co-title">🔥 电池起火</div>
+          1. 疏散至上风向<br>
+          2. 拨打119，告知锂电池起火<br>
+          3. 大量水降温或干粉/沙土覆盖<br>
+          4. 持续监控24h防复燃<br>
+          5. 等待专业消防
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT PAGE (dynamic) -->
+    <div class="page" id="page-content">
+      <div class="content-wrap" id="contentBody"></div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div class="page" id="page-profile">
+      <div class="profile-header">
+        <div class="ph-icon">🚛</div>
+        <h2>徐工维修手册</h2>
+        <p>V1.0 | 2026年8月</p>
+      </div>
+      <div class="profile-menu">
+        <div class="pm-item" onclick="location.href='../../index.html'">
+          <span class="pm-icon">📚</span><span class="pm-text">返回手册中心</span><span class="pm-arrow">›</span>
+        </div>
+        <div class="pm-item" onclick="navigateToContent('checklist')">
+          <span class="pm-icon">✅</span><span class="pm-text">日常检查清单</span><span class="pm-arrow">›</span>
+        </div>
+        <div class="pm-item" onclick="navigateToContent('record')">
+          <span class="pm-icon">📝</span><span class="pm-text">维修记录表</span><span class="pm-arrow">›</span>
+        </div>
+        <div class="pm-item" onclick="navigateToContent('tools')">
+          <span class="pm-icon">🧰</span><span class="pm-text">维修工具清单</span><span class="pm-arrow">›</span>
+        </div>
+        <div class="pm-item" onclick="navigateToContent('cases')">
+          <span class="pm-icon">📖</span><span class="pm-text">维修案例分析</span><span class="pm-arrow">›</span>
+        </div>
+        <div class="pm-item" onclick="navigateToContent('changelog')">
+          <span class="pm-icon">📋</span><span class="pm-text">更新日志</span><span class="pm-arrow">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <nav class="tab-bar">
+    <button class="tab-item active" data-tab="home" onclick="showPage('home')">
+      <span class="tab-icon">🏠</span><span>首页</span>
+    </button>
+    <button class="tab-item" data-tab="systems" onclick="showPage('systems')">
+      <span class="tab-icon">📚</span><span>系统</span>
+    </button>
+    <button class="tab-item" data-tab="fault" onclick="showPage('fault-index')">
+      <span class="tab-icon">🔧</span><span>故障</span>
+    </button>
+    <button class="tab-item" data-tab="safety" onclick="showPage('safety')">
+      <span class="tab-icon">⚠️</span><span>安全</span>
+    </button>
+    <button class="tab-item" data-tab="profile" onclick="showPage('profile')">
+      <span class="tab-icon">👤</span><span>我的</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-bar">
+    <button onclick="closeSearch()">取消</button>
+    <input type="text" id="searchInput" placeholder="输入关键词搜索..." oninput="doSearch(this.value)">
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<script>
+// ===== Chapter data =====
+var chapters = [
+  {id:'ch1',num:'一',icon:'🔧',color:'#005cbf',title:'维修思路与基本流程',desc:'诊断流程、上电检查、排查方法'},
+  {id:'ch2',num:'二',icon:'⚡',color:'#e63900',title:'多合一系统结构与原理',desc:'PDU、绝缘检测、互锁、预充管理'},
+  {id:'ch3',num:'三',icon:'🔋',color:'#1b8a3a',title:'新能源三电系统',desc:'电池、电机、MCU、空压机、油泵'},
+  {id:'ch4',num:'四',icon:'🌡️',color:'#c77700',title:'热管理系统',desc:'电机冷却、空调、电池热管理'},
+  {id:'ch5',num:'五',icon:'💡',color:'#6b3fa0',title:'低压电气系统故障维修',desc:'24V系统、保险、CAN总线'},
+  {id:'ch6',num:'六',icon:'📋',color:'#005cbf',title:'故障诊断与排查指南',desc:'故障码表、维修案例、工具清单'},
+  {id:'ch7',num:'七',icon:'🛡️',color:'#cc1f1a',title:'安全操作规程',desc:'高压安全、防护装备、应急处理'}
+];
+
+// ===== Content database =====
+var contentDB = {
+  'ch1': function(){return `
+    <h2>第一章 维修思路与基本流程</h2>
+    <div class="callout callout-danger"><div class="co-title">⚠ 核心维修思路</div>
+    遇到故障<b>先拧钥匙上电</b>，看是否能上低压；如果不能上电，查低压24V电压、显示屏线路、保险、显示屏是否正常；然后看是否上高压；如果不能上高压，把仪表切换到<b>故障测试界面</b>，看目前有什么故障状态，根据故障代码来判断哪一块出了问题，再查具体线路、设备。</div>
+    <h3>维修基本原则</h3>
+    <div class="card-grid">
+      <div class="info-card"><h4>🔒 安全第一</h4><p>高压系统存在致命危险，维修前必须断开高压、完成验电、佩戴绝缘防护。</p></div>
+      <div class="info-card"><h4>📋 先简后繁</h4><p>先检查低压（24V/保险/线路），再检查高压；先看故障码，再查线路。</p></div>
+      <div class="info-card"><h4>🔍 由外到内</h4><p>先检查外部连接器、线束外观，再深入检查控制器和部件本体。</p></div>
+      <div class="info-card"><h4>📊 代码导向</h4><p>以故障代码为线索精准定位，避免盲目拆装。</p></div>
+    </div>
+    <h3>故障诊断标准流程</h3>
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><b>接收故障车辆，了解现象</b><p>向驾驶员了解故障工况、现象、频率</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><b>拧钥匙上电，检查低压</b><p>钥匙ON档，仪表不亮→查24V电池/主保险/显示屏线路</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><b>检查能否上高压</b><p>低压正常后上Ready，无法上→切到故障测试界面查故障码</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step warning"><div class="flow-num">4</div><div class="flow-content"><b>读故障码，判断部位</b><p>对照故障代码表确定故障系统</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-content"><b>针对性检查线路设备</b><p>查连接器、线束、传感器、执行器、控制器</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">6</div><div class="flow-content"><b>排除故障并验证</b><p>更换/修复后清码，重新上电验证</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step success"><div class="flow-num">7</div><div class="flow-content"><b>填写维修记录</b><p>记录现象/原因/处理/配件</p></div></div>
+    <h3>低压上电检查</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>步骤</th><th>操作</th><th>正常</th><th>异常处理</th></tr>
+      <tr><td>1. 查24V电池</td><td>万用表测电池端电压</td><td>≥24V(满电27.6V)</td><td>低→充电/更换电池；查DCDC输出</td></tr>
+      <tr><td>2. 查主保险</td><td>通断档测保险</td><td>导通(0Ω)</td><td>断→换同规格，排查短路</td></tr>
+      <tr><td>3. 查显示屏线路</td><td>查接插件是否松动氧化</td><td>牢固无腐蚀</td><td>松→插紧；氧化→清洁/更换</td></tr>
+      <tr><td>4. 钥匙上电</td><td>钥匙ON档</td><td>仪表点亮自检</td><td>不亮→查钥匙/显示屏保险/本体</td></tr>
+    </table></div>
+    <h3>高压上电检查</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>步骤</th><th>正常</th><th>异常处理</th></tr>
+      <tr><td>1. 确认低压正常</td><td>无低压故障码</td><td>先排除低压故障</td></tr>
+      <tr><td>2. 查故障测试界面</td><td>无活动故障码</td><td>有码→对照故障码表排查</td></tr>
+      <tr><td>3. 踩刹车上高压</td><td>继电器吸合，Ready灯亮</td><td>无法上→见下方排查</td></tr>
+      <tr><td>4. 查高压状态</td><td>母线电压正常</td><td>异常→查BMS/PDU/预充</td></tr>
+    </table></div>
+    <div class="callout callout-warning"><div class="co-title">⚠ 无法上高压排查顺序</div>
+    <b>1.</b> 仪表有无未消除故障码 → 有则先排查<br>
+    <b>2.</b> 高压互锁是否正常 → 查高压接插件是否插紧<br>
+    <b>3.</b> 绝缘阻抗是否达标 → 绝缘电阻表测量<br>
+    <b>4.</b> 预充回路是否正常 → 查预充电阻/继电器<br>
+    <b>5.</b> BMS是否正常通信 → 查CAN线路</div>
+  `},
+  'ch2': function(){return `
+    <h2>第二章 多合一系统结构与原理</h2>
+    <div class="callout callout-info"><div class="co-title">📋 产品概述</div>
+    <b>描述：</b>高压配电单元，专用于新能源车高压系统的电源分配与管理<br>
+    <b>功能：</b>PDU控制器、绝缘检测仪、电流采样、电压采集、故障检测<br>
+    <b>特性：</b>车载高压配电、预充管理、绝缘检测、互锁检测、电压电流检测、高压急断</div>
+    <h3>多合一集成电源功能模块</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>模块</th><th>功能</th><th>维修关注</th></tr>
+      <tr><td>PDU控制器</td><td>高压电源分配，控制各支路通断</td><td>继电器状态、控制信号、CAN</td></tr>
+      <tr><td>绝缘检测仪</td><td>检测高压回路对地绝缘</td><td>阻值标准≥500Ω/V</td></tr>
+      <tr><td>电流采样</td><td>采集回路电流值</td><td>传感器信号、精度</td></tr>
+      <tr><td>电压采集</td><td>采集母线电压</td><td>采样线、一致性</td></tr>
+      <tr><td>故障检测</td><td>综合检测触发保护</td><td>故障码读取、等级</td></tr>
+      <tr><td>DCDC模块</td><td>高压转24V低压</td><td>输出27.6V、散热</td></tr>
+    </table></div>
+    <h3>DCDC维修要点</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>检查项</th><th>方法</th><th>标准</th><th>异常处理</th></tr>
+      <tr><td>输出电压</td><td>万用表测输出端</td><td>27.2~27.8V</td><td>无输出→查高压输入/使能；偏低→查负载</td></tr>
+      <tr><td>使能信号</td><td>查VCU使能线</td><td>上高压后有信号</td><td>无→查VCU/CAN/线路</td></tr>
+      <tr><td>散热</td><td>查冷却风扇/水路</td><td>正常运转</td><td>过温→清理散热器/查冷却液</td></tr>
+    </table></div>
+    <h3>高压上电时序</h3>
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><b>低压上电完成</b><p>24V正常，各控制器自检通过，CAN建立</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><b>互锁检测</b><p>所有高压接插件须插紧，互锁闭合</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><b>绝缘检测</b><p>阻抗≥500Ω/V × 额定电压</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><b>预充过程</b><p>预充继电器闭合，给母线电容充电至电池电压90%</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step success"><div class="flow-num">5</div><div class="flow-content"><b>主继电器闭合</b><p>闭合主正主负，断开预充，Ready灯亮</p></div></div>
+    <div class="callout callout-danger"><div class="co-title">⚠ 预充失败排查</div>
+    1. <b>预充电阻</b>：测阻值(100~500Ω)，开路则更换<br>
+    2. <b>预充继电器</b>：测线圈电阻和触点<br>
+    3. <b>母线电容</b>：是否短路<br>
+    4. <b>高压回路短路</b>：绝缘测量<br>
+    5. <b>BMS控制信号</b>：是否发出预充指令</div>
+    <h3>绝缘检测维修</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>等级</th><th>阻抗</th><th>状态</th><th>措施</th></tr>
+      <tr><td>正常</td><td>≥500Ω/V×额定</td><td><span class="badge badge-success">正常</span></td><td>无需处理</td></tr>
+      <tr><td>一级报警</td><td>100~500Ω/V×额定</td><td><span class="badge badge-warning">警告</span></td><td>尽快排查</td></tr>
+      <tr><td>二级报警</td><td>＜100Ω/V×额定</td><td><span class="badge badge-danger">严重</span></td><td>立即停车断电</td></tr>
+    </table></div>
+    <div class="callout callout-info"><div class="co-title">🔧 绝缘低排查</div>
+    <b>分段排查法：</b>断开电池总负→兆欧表(500V)测各支路对地→逐个断开MCU/DCDC/空压机/油泵/PTC/空调→每断一个重测→恢复则该支路为故障点<br>
+    <b>常见原因：</b>线束破损、接插件进水、部件绝缘老化、冷却液渗入</div>
+    <h3>互锁检测维修</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>现象</th><th>原因</th><th>排查</th></tr>
+      <tr><td>仪表互锁故障</td><td>接插件未插紧</td><td>逐个检查高压接插件到位</td></tr>
+      <tr><td>高压无法上</td><td>互锁信号线断路</td><td>万用表测通断逐段排查</td></tr>
+      <tr><td>行驶中断高压</td><td>接插件松动</td><td>查锁止机构，插紧锁好</td></tr>
+      <tr><td>互锁线对地短路</td><td>线束磨损碰车身</td><td>查线束走向，修复磨损</td></tr>
+    </table></div>
+  `},
+  'ch3': function(){return `
+    <h2>第三章 新能源三电系统</h2>
+    <div class="callout callout-info"><div class="co-title">📋 三电组成</div>
+    <b>大三电：</b>动力电池、电机（驱动+变速箱）、电控MCU<br>
+    <b>小三电（商用车）：</b>多合一集成电源、电动空压机、高压助力油泵<br>
+    <b>其他高压部件：</b>空调压缩机、PTC、电池液冷机组、直流充电插座</div>
+    <h3>动力电池系统</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>检查项</th><th>方法</th><th>标准</th><th>异常处理</th></tr>
+      <tr><td>电池总压</td><td>仪表/BMS读取</td><td>与SOC匹配</td><td>异常→查BMS/继电器/熔断器</td></tr>
+      <tr><td>单体压差</td><td>BMS读各单体</td><td>＜30mV</td><td>大→均衡充/更换单体</td></tr>
+      <tr><td>温度一致性</td><td>BMS读温度</td><td>温差＜5℃, 15~35℃</td><td>大→查液冷/探头</td></tr>
+      <tr><td>SOC精度</td><td>对比实际充放</td><td>误差＜5%</td><td>大→满充满放校准</td></tr>
+      <tr><td>绝缘阻抗</td><td>兆欧表测</td><td>≥500Ω/V×额定</td><td>低→分段排查</td></tr>
+    </table></div>
+    <div class="callout callout-warning"><div class="co-title">⚠ 电池常见故障</div>
+    <b>单体压差大：</b>满充满放均衡，仍不行→查BMS均衡/更换单体<br>
+    <b>电池过温：</b>查液冷水泵/散热器/冷却液<br>
+    <b>SOC跳变：</b>查电流传感器精度→SOC校准→查BMS软件<br>
+    <b>无法充电：</b>查充电插座/充电机/BMS使能/协议匹配</div>
+    <h3>驱动电机系统</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>检查项</th><th>方法</th><th>标准</th><th>异常处理</th></tr>
+      <tr><td>电机绝缘</td><td>兆欧表测绕组对地</td><td>≥20MΩ</td><td>低→烘干/更换</td></tr>
+      <tr><td>相间电阻</td><td>万用表U-V/V-W/W-U</td><td>三相平衡偏差＜5%</td><td>不平衡→换/返修</td></tr>
+      <tr><td>旋变信号</td><td>示波器查波形</td><td>幅值稳定</td><td>异常→查旋变线束/本体</td></tr>
+      <tr><td>变速箱油</td><td>查油位油质</td><td>清澈无金属屑</td><td>变质→换油；有屑→查齿轮</td></tr>
+    </table></div>
+    <h3>电机控制器MCU</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>现象</th><th>可能原因</th><th>排查步骤</th></tr>
+      <tr><td>MCU不工作/通信断</td><td>低压断/CAN断/主板坏</td><td>1.查低压保险 2.查CAN线 3.查接插件 4.换MCU</td></tr>
+      <tr><td>电机不转/无力</td><td>驱动板/IGBT/相线断</td><td>1.查三相输出 2.测IGBT 3.查相线 4.换MCU</td></tr>
+      <tr><td>MCU过温</td><td>散热差/水冷堵/IGBT老化</td><td>1.查冷却水路 2.清散热器 3.查水泵</td></tr>
+      <tr><td>相电流不平衡</td><td>IGBT坏/电机绕组坏</td><td>1.对调判断 2.测IGBT 3.测相间电阻</td></tr>
+    </table></div>
+    <h3>电动空压机</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>现象</th><th>原因</th><th>排查</th></tr>
+      <tr><td>不工作</td><td>高压断/控制器坏/压力开关</td><td>1.查高压接插件 2.查控制信号 3.测高压输入 4.查控制器</td></tr>
+      <tr><td>打气慢</td><td>磨损/气路漏/单向阀</td><td>1.查漏气 2.查单向阀 3.测效率 4.更换</td></tr>
+      <tr><td>异响</td><td>轴承/活塞/松动</td><td>1.听诊 2.查紧固 3.更换</td></tr>
+      <tr><td>频繁启停</td><td>压力开关/漏气</td><td>1.查参数 2.查漏 3.调整</td></tr>
+    </table></div>
+    <h3>高压助力油泵</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>现象</th><th>原因</th><th>排查</th></tr>
+      <tr><td>转向沉重</td><td>油泵不工作/油不足</td><td>1.查高压 2.查油泵电机 3.查油位 4.查助力压力</td></tr>
+      <tr><td>转向异响</td><td>磨损/有空气/油差</td><td>1.排气 2.换油 3.查油泵</td></tr>
+      <tr><td>不启动</td><td>高压断/控制异常</td><td>1.查接插件 2.查使能 3.查控制器</td></tr>
+    </table></div>
+    <h3>其他高压部件</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>部件</th><th>常见故障</th><th>排查</th></tr>
+      <tr><td>空调压缩机</td><td>不制冷/异响</td><td>查高压供电/制冷剂/膨胀阀</td></tr>
+      <tr><td>PTC加热器</td><td>不制热</td><td>查高压供电/控制信号/PTC电阻</td></tr>
+      <tr><td>液冷机组</td><td>不工作</td><td>查高压接插件/CAN/控制器</td></tr>
+      <tr><td>充电插座</td><td>无法充电</td><td>查端子/CC/CP信号/BMS使能</td></tr>
+    </table></div>
+  `},
+  'ch4': function(){return `
+    <h2>第四章 热管理系统</h2>
+    <div class="callout callout-info"><div class="co-title">📋 徐工新润热管理</div>
+    从系统集成角度统筹热量管理，根据工况和环境自动调节冷却强度，保证被冷却对象在最佳温度范围。广义包括<b>电机冷却系统、空调系统、电池热管理系统</b>。</div>
+    <h3>系统组成</h3>
+    <div class="card-grid">
+      <div class="info-card"><h4>⚙️ 电机冷却</h4><p>为驱动电机和MCU提供冷却，维持安全温度</p></div>
+      <div class="info-card"><h4>❄️ 空调系统</h4><p>驾驶室制冷制热，与电池热管理联动</p></div>
+      <div class="info-card"><h4>🔋 电池热管理</h4><p>液冷机组调节电池温度至15~35℃</p></div>
+    </div>
+    <h3>电机冷却系统部件</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>部件</th><th>常见故障</th><th>检查方法</th></tr>
+      <tr><td>冷却水泵</td><td>不转/流量不足</td><td>听运转声/测供电/查控制信号</td></tr>
+      <tr><td>散热器</td><td>堵塞/变形</td><td>目视散热片/查进出水温差</td></tr>
+      <tr><td>膨胀水箱</td><td>液位低/盖阀失效</td><td>查液位MIN~MAX/盖密封</td></tr>
+      <tr><td>冷却管路</td><td>泄漏/老化/堵塞</td><td>目视管路接头</td></tr>
+      <tr><td>电子风扇</td><td>不转/转速异常</td><td>查供电/控制信号/电机</td></tr>
+    </table></div>
+    <h3>电机过温排查流程</h3>
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-content"><b>确认过温报警</b><p>温度＞85℃</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-content"><b>查冷却液液位</b><p>低→补充并排查泄漏</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-content"><b>查水泵</b><p>听运转声/摸进出水温差</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><b>查散热器和风扇</b><p>堵→清洗；风扇不转→查电路</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-content"><b>查管路阀门</b><p>堵/扭/阀门→更换/疏通</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step danger"><div class="flow-num">6</div><div class="flow-content"><b>查温度传感器</b><p>排除以上后查传感器是否漂移/故障</p></div></div>
+    <h3>电池液冷机组</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>模式</th><th>触发</th><th>动作</th><th>目标</th></tr>
+      <tr><td>制冷</td><td>电池＞35℃</td><td>压缩机运行</td><td>25~30℃</td></tr>
+      <tr><td>加热</td><td>电池＜5℃</td><td>PTC运行</td><td>10~15℃</td></tr>
+      <tr><td>保温</td><td>15~35℃</td><td>仅水泵</td><td>维持</td></tr>
+    </table></div>
+    <h3>电池温度异常排查</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>现象</th><th>原因</th><th>排查</th></tr>
+      <tr><td>电池温度过高</td><td>液冷不制冷/水泵坏/管堵</td><td>1.查液冷机组 2.查压缩机 3.查水泵 4.查冷却液</td></tr>
+      <tr><td>电池温度过低</td><td>PTC不工作/液不足</td><td>1.查PTC供电 2.查控制 3.查PTC本体 4.补液</td></tr>
+      <tr><td>温差过大</td><td>流道堵/探头故障</td><td>1.查温度数据 2.查流道 3.查循环 4.换探头</td></tr>
+      <tr><td>液冷机组不工作</td><td>高压断/控制器/通信</td><td>1.查接插件 2.查CAN 3.查控制器 4.查使能</td></tr>
+    </table></div>
+    <div class="callout callout-warning"><div class="co-title">⚠ 冷却液注意事项</div>
+    1. 使用厂家指定专用冷却液，不可混用<br>
+    2. 冷却液导电，避免溅到高压部件<br>
+    3. 补充须在系统冷却后进行<br>
+    4. 冬季前检测冰点</div>
+  `},
+  'ch5': function(){return `
+    <h2>第五章 低压电气系统故障维修</h2>
+    <div class="callout callout-info"><div class="co-title">📋 要点</div>
+    在实践中学习，边学边干。低压系统是整车正常的基础，低压故障直接导致高压无法上电。</div>
+    <h3>低压系统组成</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>部件</th><th>功能</th><th>常见故障</th></tr>
+      <tr><td>低压蓄电池</td><td>存储启动供电</td><td>亏电/极板硫化/端子氧化</td></tr>
+      <tr><td>DCDC</td><td>高压转24V</td><td>无输出/电压异常/过温</td></tr>
+      <tr><td>配电盒/保险盒</td><td>分配保护</td><td>保险断/继电器坏/端子氧化</td></tr>
+      <tr><td>VCU</td><td>整车控制核心</td><td>不工作/通信断/程序异常</td></tr>
+      <tr><td>BMS</td><td>电池管理</td><td>不工作/通信断</td></tr>
+      <tr><td>仪表/显示屏</td><td>显示诊断</td><td>不亮/花屏/通信断</td></tr>
+      <tr><td>CAN总线</td><td>控制器间通信</td><td>总线故障/终端电阻/干扰</td></tr>
+    </table></div>
+    <h3>低压电池检查</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>检查项</th><th>工具</th><th>标准</th><th>异常处理</th></tr>
+      <tr><td>静态电压</td><td>万用表</td><td>≥24.0V(满电27.6V)</td><td>＜24V→充电；无法充入→测内阻/更换</td></tr>
+      <tr><td>启动时电压</td><td>万用表</td><td>压降不超过2V</td><td>压降大→容量不足→更换</td></tr>
+      <tr><td>DCDC工作时</td><td>万用表</td><td>27.2~27.8V</td><td>不在范围→DCDC异常/充电线问题</td></tr>
+      <tr><td>端子接触</td><td>目视/手触</td><td>无氧化无松动无发热</td><td>氧化→清洁导电膏；松→紧固</td></tr>
+      <tr><td>外观</td><td>目视</td><td>无鼓包无漏液</td><td>鼓包/漏液→更换</td></tr>
+    </table></div>
+    <div class="callout callout-warning"><div class="co-title">⚠ 保险注意事项</div>
+    1. 换保险必须<b>同规格</b>，严禁用大规格替代<br>
+    2. 频繁熔断说明有短路/过载，必须排查根源<br>
+    3. 拔插保险前先断低压总电源</div>
+    <h3>CAN总线检查</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>项目</th><th>方法</th><th>标准</th><th>异常处理</th></tr>
+      <tr><td>CAN电阻</td><td>断电后万用表测总线两端</td><td>60Ω(两120Ω并联)</td><td>120Ω→缺终端电阻；0Ω→短路</td></tr>
+      <tr><td>CAN-H电压</td><td>通信时万用表</td><td>约2.6~2.7V</td><td>异常→查短路/断路</td></tr>
+      <tr><td>CAN-L电压</td><td>通信时万用表</td><td>约2.3~2.4V</td><td>异常→查短路/断路</td></tr>
+      <tr><td>波形</td><td>示波器</td><td>差分波形幅值≥1.5V</td><td>畸变→查干扰/终端电阻/线束</td></tr>
+    </table></div>
+    <h3>常见故障排查</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>现象</th><th>排查顺序</th><th>常见原因</th></tr>
+      <tr><td>整车无电/仪表不亮</td><td>电池电压→主保险→钥匙→配电盒→仪表</td><td>电池亏电/保险断/钥匙坏/仪表保险断</td></tr>
+      <tr><td>无法上高压</td><td>故障码→互锁→绝缘→预充→CAN</td><td>故障码/接插件松/绝缘低/预充坏</td></tr>
+      <tr><td>部分控制器不通信</td><td>CAN电阻→波形→逐段断开→控制器</td><td>终端电阻缺/CAN断/收发器坏</td></tr>
+      <tr><td>灯光不亮</td><td>保险→开关→灯泡→继电器→线束</td><td>保险断/开关坏/灯泡坏</td></tr>
+      <tr><td>电池频繁亏电</td><td>DCDC输出→静默电流→电池内阻→寄生负载</td><td>DCDC不充/静默大/电池老化/漏电</td></tr>
+    </table></div>
+    <div class="callout callout-success"><div class="co-title">✓ 静默电流检查</div>
+    车辆休眠后断开电池负极，万用表电流档串联测量。正常＜0.5A。异常→逐个拔保险，电流降至正常时该回路为漏电回路。</div>
+  `},
+  'ch6': function(){return `
+    <h2>第六章 故障诊断与排查指南</h2>
+    <h3>典型维修案例</h3>
+    <div class="info-card">
+      <h4>案例1：无法上低压电</h4>
+      <p><b>现象：</b>钥匙ON档仪表不亮，整车无电</p>
+      <p><b>过程：</b>测电池电压22.3V→亏电→外接电源启动→DCDC输出27.5V正常→查静默电流1.2A超标→逐个拔保险定位→某回路漏电→线束磨损碰车身</p>
+      <p><b>处理：</b>修复线束，更换亏电电池，消除漏电</p>
+    </div>
+    <div class="info-card">
+      <h4>案例2：预充失败</h4>
+      <p><b>现象：</b>低压正常，上高压显示P0A03预充失败</p>
+      <p><b>过程：</b>读故障码P0A03→测预充电阻开路→查预充继电器正常→查MCU母线电容正常→电阻烧蚀→多次预充失败导致</p>
+      <p><b>处理：</b>更换预充电阻，清码，重新上电正常</p>
+    </div>
+    <div class="info-card">
+      <h4>案例3：行驶中断高压</h4>
+      <p><b>现象：</b>行驶中突然失去动力，仪表高压故障</p>
+      <p><b>过程：</b>读码P0A01互锁故障→查高压接插件→MCU三相线接插件锁止松动→端子轻微烧蚀</p>
+      <p><b>处理：</b>更换烧蚀端子，重新插紧锁好，清码试车正常</p>
+    </div>
+    <h3>维修工具清单</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>工具</th><th>规格</th><th>用途</th><th>必备</th></tr>
+      <tr><td>数字万用表</td><td>CAT III 1000V</td><td>电压/电流/电阻/通断</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>绝缘电阻表</td><td>500V/1000V</td><td>绝缘检测</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>示波器</td><td>双通道+</td><td>CAN波形/旋变分析</td><td><span class="badge badge-warning">推荐</span></td></tr>
+      <tr><td>电池内阻仪</td><td>24V适用</td><td>电池内阻检测</td><td><span class="badge badge-warning">推荐</span></td></tr>
+      <tr><td>绝缘手套</td><td>1000V等级</td><td>高压操作防护</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>绝缘工具套装</td><td>1000V绝缘</td><td>高压拆装</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>高压验电笔</td><td>DC 1000V</td><td>验电确认</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>专用诊断仪</td><td>徐工专用</td><td>故障码/数据流</td><td><span class="badge badge-danger">必备</span></td></tr>
+    </table></div>
+  `},
+  'ch7': function(){return `
+    <h2>第七章 安全操作规程</h2>
+    <div class="callout callout-danger"><div class="co-title">⚠ 高压安全警示</div>
+    电动重卡高压系统电压600V+，存在<b>致命电击危险</b>。高压操作必须由<b>持高压电工证</b>人员执行！</div>
+    <h3>维修前安全准备</h3>
+    <div class="flow-step danger"><div class="flow-num">1</div><div class="flow-content"><b>车辆断电休眠</b><p>关钥匙，等待≥5分钟，确保高压完全休眠</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step danger"><div class="flow-num">2</div><div class="flow-content"><b>断开维修开关MSD</b><p>佩戴绝缘手套，断开MSD，妥善保管</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step danger"><div class="flow-num">3</div><div class="flow-content"><b>验电确认</b><p>高压验电笔/万用表确认高压已切断，不可省略</p></div></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-content"><b>悬挂警示标识</b><p>"高压维修中，禁止通电"</p></div></div>
+    <h3>维修后恢复</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>步骤</th><th>操作</th><th>注意</th></tr>
+      <tr><td>1</td><td>检查所有高压接插件插紧锁好</td><td>确保互锁回路闭合</td></tr>
+      <tr><td>2</td><td>检查工具全部收回</td><td>严禁遗留</td></tr>
+      <tr><td>3</td><td>恢复低压负极</td><td>端子清洁紧固</td></tr>
+      <tr><td>4</td><td>插入MSD</td><td>佩戴绝缘手套</td></tr>
+      <tr><td>5</td><td>清除警示标识</td><td>确认人员安全</td></tr>
+      <tr><td>6</td><td>上电验证</td><td>先低压后高压</td></tr>
+    </table></div>
+    <h3>个人防护装备</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>装备</th><th>规格</th><th>检查</th></tr>
+      <tr><td>绝缘手套</td><td>1000V等级</td><td>充气检查无漏气</td></tr>
+      <tr><td>绝缘鞋</td><td>电工等级</td><td>鞋底无破损</td></tr>
+      <tr><td>护目镜</td><td>防飞溅</td><td>镜片完好</td></tr>
+      <tr><td>绝缘垫</td><td>1000V等级</td><td>无破损干燥</td></tr>
+      <tr><td>防电弧服</td><td>8cal/cm²+</td><td>无破损油污</td></tr>
+    </table></div>
+    <h3>应急处理</h3>
+    <div class="callout callout-danger"><div class="co-title">🚨 触电</div>
+    1. 立即断电(急断/MSD)<br>2. 严禁徒手，用绝缘物分离<br>3. 拨打120<br>4. 无呼吸→CPR<br>5. 保护现场</div>
+    <div class="callout callout-warning"><div class="co-title">🔥 电池起火</div>
+    1. 疏散上风向<br>2. 拨打119告知锂电池<br>3. 大量水降温/干粉沙土<br>4. 持续监控24h防复燃<br>5. 等专业消防</div>
+  `},
+  'checklist': function(){return `
+    <h2>日常检查清单</h2>
+    <p style="color:var(--text-2);font-size:13px;margin-bottom:16px">建议每日出车前/交接班执行</p>
+    <div class="tbl-wrap"><table>
+      <tr><th>序</th><th>检查项</th><th>内容</th><th>结果</th></tr>
+      <tr><td>1</td><td>低压电池</td><td>电压≥24V，端子无氧化</td><td>□正常 □异常</td></tr>
+      <tr><td>2</td><td>仪表自检</td><td>各灯自检正常无故障灯</td><td>□正常 □异常</td></tr>
+      <tr><td>3</td><td>故障码</td><td>无活动故障码</td><td>□正常 □异常</td></tr>
+      <tr><td>4</td><td>高压接插件</td><td>无松动/烧蚀/异味</td><td>□正常 □异常</td></tr>
+      <tr><td>5</td><td>冷却液液位</td><td>MIN~MAX之间</td><td>□正常 □异常</td></tr>
+      <tr><td>6</td><td>冷却管路</td><td>无渗漏/老化开裂</td><td>□正常 □异常</td></tr>
+      <tr><td>7</td><td>制动系统</td><td>气压正常/空压机正常</td><td>□正常 □异常</td></tr>
+      <tr><td>8</td><td>转向系统</td><td>转向轻便/助力正常</td><td>□正常 □异常</td></tr>
+      <tr><td>9</td><td>灯光信号</td><td>大灯/转向灯/刹车灯正常</td><td>□正常 □异常</td></tr>
+      <tr><td>10</td><td>充电插座</td><td>无灰尘水渍/端子正常</td><td>□正常 □异常</td></tr>
+      <tr><td>11</td><td>SOC</td><td>SOC满足运营需求</td><td>□正常 □异常</td></tr>
+      <tr><td>12</td><td>底盘轮胎</td><td>无异常磨损/气压正常</td><td>□正常 □异常</td></tr>
+    </table></div>
+  `},
+  'record': function(){return `
+    <h2>维修记录表</h2>
+    <div class="tbl-wrap"><table>
+      <tr><th>项目</th><th>内容</th></tr>
+      <tr><td>维修日期</td><td>________年____月____日</td></tr>
+      <tr><td>车辆编号</td><td>__________________</td></tr>
+      <tr><td>维修人员</td><td>__________________</td></tr>
+      <tr><td>故障现象</td><td>__________________________________</td></tr>
+      <tr><td>故障代码</td><td>__________________________________</td></tr>
+      <tr><td>排查过程</td><td>__________________________________<br>__________________________________</td></tr>
+      <tr><td>故障原因</td><td>__________________________________</td></tr>
+      <tr><td>处理方法</td><td>__________________________________</td></tr>
+      <tr><td>更换配件</td><td>__________________________________</td></tr>
+      <tr><td>验证结果</td><td>□ 故障消除 □ 未完全消除 □ 需上报</td></tr>
+      <tr><td>备注</td><td>__________________________________</td></tr>
+    </table></div>
+  `},
+  'tools': function(){return `
+    <h2>维修工具清单</h2>
+    <div class="tbl-wrap"><table>
+      <tr><th>工具</th><th>规格</th><th>用途</th><th>必备</th></tr>
+      <tr><td>数字万用表</td><td>CAT III 1000V</td><td>电压/电流/电阻/通断</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>绝缘电阻表</td><td>500V/1000V</td><td>高压绝缘检测</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>示波器</td><td>双通道+</td><td>CAN波形/旋变分析</td><td><span class="badge badge-warning">推荐</span></td></tr>
+      <tr><td>电池内阻仪</td><td>24V适用</td><td>电池内阻检测</td><td><span class="badge badge-warning">推荐</span></td></tr>
+      <tr><td>绝缘手套</td><td>1000V等级</td><td>高压操作防护</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>绝缘鞋/垫</td><td>电工等级</td><td>高压操作防护</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>绝缘工具套装</td><td>1000V绝缘</td><td>高压系统拆装</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>高压验电笔</td><td>DC 1000V</td><td>验电确认</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>专用诊断仪</td><td>徐工专用</td><td>故障码/数据流</td><td><span class="badge badge-danger">必备</span></td></tr>
+      <tr><td>扭矩扳手</td><td>5~200N·m</td><td>紧固高压连接</td><td><span class="badge badge-warning">推荐</span></td></tr>
+      <tr><td>电流钳形表</td><td>DC/AC大量程</td><td>测工作电流</td><td><span class="badge badge-warning">推荐</span></td></tr>
+    </table></div>
+  `},
+  'cases': function(){return `
+    <h2>维修案例分析</h2>
+    <div class="info-card">
+      <h4>案例1：无法上低压电</h4>
+      <p><b>现象：</b>钥匙ON档仪表不亮</p>
+      <p><b>排查：</b>测电池22.3V亏电→外接启动→DCDC 27.5V正常→静默电流1.2A超标→逐个拔保险定位→某回路漏电→线束磨损碰车身</p>
+      <p><b>处理：</b>修复线束+换电池+消除漏电</p>
+    </div>
+    <div class="info-card">
+      <h4>案例2：预充失败P0A03</h4>
+      <p><b>现象：</b>低压正常无法上高压</p>
+      <p><b>排查：</b>读码P0A03→测预充电阻开路→继电器正常→电容正常→电阻烧蚀</p>
+      <p><b>处理：</b>更换预充电阻，清码验证正常</p>
+    </div>
+    <div class="info-card">
+      <h4>案例3：行驶中断高压P0A01</h4>
+      <p><b>现象：</b>行驶中突然失去动力</p>
+      <p><b>排查：</b>读码P0A01互锁故障→MCU三相线接插件锁止松动→端子烧蚀</p>
+      <p><b>处理：</b>更换端子+重新插紧锁好+清码试车正常</p>
+    </div>
+  `},
+  'changelog': function(){return `
+    <h2>更新日志</h2>
+    <div class="tbl-wrap"><table>
+      <tr><th>版本</th><th>日期</th><th>更新内容</th></tr>
+      <tr><td>V1.0</td><td>2026-08-29</td><td>初始版本，涵盖维修思路、多合一、三电、热管理、低压电气、故障诊断、安全规程七大章节</td></tr>
+      <tr><td></td><td></td><td><i>待更新：根据每日维修问题持续补充</i></td></tr>
+    </table></div>
+    <div class="callout callout-info"><div class="co-title">📌 更新说明</div>
+    遇到新故障/新案例/需补充内容，请反馈至技术保障部。更新方向：新增故障码、新增案例、补充方法、修正信息、新增车型。</div>
+  `}
+};
+
+// ===== Navigation history =====
+var navHistory = [];
+var currentTab = 'home';
+
+// ===== Page switching =====
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  var page = document.getElementById('page-' + pageId);
+  if (page) {
+    page.classList.add('active');
+    document.getElementById('appContent').scrollTop = 0;
+  }
+  // Update tab bar
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  var tabMap = {'home':'home','systems':'systems','fault-index':'fault','fault-codes':'fault','safety':'safety','profile':'profile'};
+  var tabName = tabMap[pageId];
+  if (tabName) {
+    currentTab = tabName;
+    document.querySelectorAll('.tab-item').forEach(t => {
+      if (t.dataset.tab === tabName) t.classList.add('active');
+    });
+  }
+  // Update header
+  var titleMap = {
+    'home':'徐工维修手册','systems':'系统总览',
+    'fault-index':'故障索引','fault-codes':'故障代码',
+    'safety':'安全规程','profile':'我的'
+  };
+  document.getElementById('pageTitle').textContent = titleMap[pageId] || '徐工维修手册';
+  // Back button
+  var backBtn = document.getElementById('backBtn');
+  if (pageId === 'home' || pageId === currentTab) {
+    backBtn.classList.remove('show');
+  } else {
+    backBtn.classList.add('show');
+  }
+}
+
+function navigateToContent(key) {
+  navHistory.push('page-' + (currentTab || 'home'));
+  showPage('content');
+  document.getElementById('pageTitle').textContent = contentDB[key] ? chapters.find(c=>c.id===key)?.title || '内容详情' : '内容详情';
+  document.getElementById('backBtn').classList.add('show');
+  var body = document.getElementById('contentBody');
+  if (contentDB[key]) {
+    body.innerHTML = contentDB[key]();
+  } else {
+    body.innerHTML = '<div class="loading">内容加载中...</div>';
+  }
+  document.getElementById('appContent').scrollTop = 0;
+}
+
+function goBack() {
+  if (navHistory.length > 0) {
+    var prev = navHistory.pop();
+    var pageId = prev.replace('page-','');
+    showPage(pageId);
+  } else {
+    showPage('home');
+  }
+}
+
+// ===== Chapter list rendering =====
+function renderChapterList(containerId, maxItems) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var items = maxItems ? chapters.slice(0, maxItems) : chapters;
+  container.innerHTML = items.map(function(ch) {
+    return '<div class="chapter-card" onclick="this.classList.toggle(\'open\')">' +
+      '<div class="chapter-header">' +
+        '<div class="chapter-num" style="background:'+ch.color+'">'+ch.num+'</div>' +
+        '<div class="chapter-info"><div class="ci-title">'+ch.title+'</div><div class="ci-desc">'+ch.desc+'</div></div>' +
+        '<span class="chapter-arrow">›</span>' +
+      '</div>' +
+      '<div class="chapter-sublist">' +
+        '<div class="chapter-sub-item" onclick="event.stopPropagation();navigateToContent(\''+ch.id+'\')">📖 查看完整内容</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ===== Search =====
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('show');
+  setTimeout(function(){ document.getElementById('searchInput').focus(); }, 100);
+}
+
+function closeSearch() {
+  document.getElementById('searchOverlay').classList.remove('show');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+
+function doSearch(keyword) {
+  keyword = keyword.trim().toLowerCase();
+  var results = document.getElementById('searchResults');
+  if (!keyword) {
+    results.innerHTML = '<div class="no-result">输入关键词搜索故障代码、系统、部件等</div>';
+    return;
+  }
+  var matches = [];
+  // Search in chapter titles
+  chapters.forEach(function(ch) {
+    if (ch.title.toLowerCase().includes(keyword) || ch.desc.toLowerCase().includes(keyword)) {
+      matches.push({type:'章节', title:ch.title, desc:ch.desc, action:'navigateToContent("'+ch.id+'")'});
+    }
+  });
+  // Search in fault codes
+  var faultData = [
+    {code:'P0A01',desc:'高压互锁故障',sys:'BMS/PDU',action:'navigateToContent("ch2")'},
+    {code:'P0A02',desc:'绝缘阻抗过低',sys:'BMS',action:'navigateToContent("ch2")'},
+    {code:'P0A03',desc:'预充失败',sys:'PDU',action:'navigateToContent("ch2")'},
+    {code:'P0A0F',desc:'电池总压异常',sys:'BMS',action:'navigateToContent("ch3")'},
+    {code:'P0A1A',desc:'MCU通信故障',sys:'MCU',action:'navigateToContent("ch3")'},
+    {code:'P0A1B',desc:'电机过温',sys:'MCU/电机',action:'navigateToContent("ch4")'},
+    {code:'P0A30',desc:'DCDC输出异常',sys:'多合一',action:'navigateToContent("ch2")'},
+    {code:'P0A40',desc:'电池单体过压',sys:'BMS',action:'navigateToContent("ch3")'},
+    {code:'P0A41',desc:'电池单体欠压',sys:'BMS',action:'navigateToContent("ch3")'},
+    {code:'P0A60',desc:'空压机故障',sys:'空压机',action:'navigateToContent("ch3")'},
+    {code:'P0A70',desc:'油泵故障',sys:'油泵',action:'navigateToContent("ch3")'},
+    {code:'P0A80',desc:'热管理通信故障',sys:'热管理',action:'navigateToContent("ch4")'},
+    {code:'P0A90',desc:'充电系统故障',sys:'充电',action:'navigateToContent("ch3")'},
+    {code:'P0AA0',desc:'低压电压异常',sys:'低压',action:'navigateToContent("ch5")'},
+    {code:'P0BB0',desc:'VCU通信故障',sys:'VCU',action:'navigateToContent("ch5")'},
+  ];
+  faultData.forEach(function(f) {
+    if (f.code.toLowerCase().includes(keyword) || f.desc.toLowerCase().includes(keyword) || f.sys.toLowerCase().includes(keyword)) {
+      matches.push({type:'故障码', title:f.code+' '+f.desc, desc:'系统：'+f.sys, action:'closeSearch();'+f.action});
+    }
+  });
+  // Search in keywords
+  var keyData = [
+    {kw:'绝缘',title:'绝缘检测维修',desc:'第二章 多合一系统',action:'navigateToContent("ch2")'},
+    {kw:'互锁',title:'互锁检测维修',desc:'第二章 多合一系统',action:'navigateToContent("ch2")'},
+    {kw:'预充',title:'预充管理与排查',desc:'第二章 多合一系统',action:'navigateToContent("ch2")'},
+    {kw:'dcdc',title:'DCDC维修要点',desc:'第二章 多合一系统',action:'navigateToContent("ch2")'},
+    {kw:'电机',title:'驱动电机系统',desc:'第三章 三电系统',action:'navigateToContent("ch3")'},
+    {kw:'电池',title:'动力电池系统',desc:'第三章 三电系统',action:'navigateToContent("ch3")'},
+    {kw:'空压机',title:'电动空压机',desc:'第三章 三电系统',action:'navigateToContent("ch3")'},
+    {kw:'油泵',title:'高压助力油泵',desc:'第三章 三电系统',action:'navigateToContent("ch3")'},
+    {kw:'冷却',title:'电机冷却系统',desc:'第四章 热管理',action:'navigateToContent("ch4")'},
+    {kw:'热管理',title:'热管理系统',desc:'第四章',action:'navigateToContent("ch4")'},
+    {kw:'空调',title:'空调系统',desc:'第四章 热管理',action:'navigateToContent("ch4")'},
+    {kw:'24v',title:'24V系统检查',desc:'第五章 低压系统',action:'navigateToContent("ch5")'},
+    {kw:'保险',title:'保险检查',desc:'第五章 低压系统',action:'navigateToContent("ch5")'},
+    {kw:'can',title:'CAN总线检查',desc:'第五章 低压系统',action:'navigateToContent("ch5")'},
+    {kw:'安全',title:'安全操作规程',desc:'第七章',action:'navigateToContent("ch7")'},
+    {kw:'工具',title:'维修工具清单',desc:'第六章',action:'navigateToContent("tools")'},
+    {kw:'检查',title:'日常检查清单',desc:'附录',action:'navigateToContent("checklist")'},
+    {kw:'案例',title:'维修案例分析',desc:'第六章',action:'navigateToContent("cases")'},
+  ];
+  keyData.forEach(function(k) {
+    if (k.kw.includes(keyword) || k.title.toLowerCase().includes(keyword)) {
+      matches.push({type:'内容', title:k.title, desc:k.desc, action:'closeSearch();'+k.action});
+    }
+  });
+
+  if (matches.length === 0) {
+    results.innerHTML = '<div class="no-result">未找到相关结果，请尝试其他关键词</div>';
+  } else {
+    results.innerHTML = matches.map(function(m) {
+      return '<div class="search-result" onclick="'+m.action+'">' +
+        '<div class="sr-title">'+m.title+'</div>' +
+        '<div class="sr-desc">'+m.type+' | '+m.desc+'</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+// ===== Init =====
+renderChapterList('chapterListHome', 4);
+renderChapterList('chapterListFull');
+
+// PWA registration
+if ('serviceWorker' in navigator) {
+  // Service worker would be registered here if hosted on a server
+}
+</script>
+</body>
+</html>
