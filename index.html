@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1a2744">
 <link rel="manifest" href="manifest.json">
-<title>二勇知识库 · 手册中心</title>
+<title>晟隆知识库 · 手册中心</title>
 <style>
 :root{
   --primary:#1a2744;--primary-dark:#0f1a30;--primary-light:#e8edf5;
@@ -17,8 +17,7 @@
   --text:#1a1a2e;--text-2:#666;--text-3:#999;
   --bg:#f0f2f5;--card:#fff;--border:#e8eaed;
   --shadow:0 2px 8px rgba(0,0,0,0.08);--shadow-lg:0 4px 16px rgba(0,0,0,0.12);
-  --radius:14px;
-  --header-h:56px;
+  --radius:14px;--header-h:56px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -63,23 +62,27 @@ body{
 .hero-title span{color:#ff8a5c}
 .hero-desc{font-size:13px;color:#a0b8e0;position:relative;z-index:1}
 .hero-stats{
-  display:flex;gap:16px;margin-top:20px;position:relative;z-index:1;
+  display:flex;gap:12px;margin-top:20px;position:relative;z-index:1;
 }
 .stat-item{
   flex:1;background:rgba(255,255,255,0.1);border-radius:10px;
-  padding:12px;text-align:center;backdrop-filter:blur(10px);
+  padding:12px 8px;text-align:center;backdrop-filter:blur(10px);
+  cursor:pointer;transition:transform .2s,background .2s;
 }
+.stat-item:active{transform:scale(0.95);background:rgba(255,255,255,0.15)}
 .stat-num{font-size:22px;font-weight:700;color:#fff}
 .stat-label{font-size:11px;color:#a0b8e0;margin-top:2px}
 /* Content */
 .content{padding:16px;padding-bottom:40px}
 .section-title{
   font-size:16px;font-weight:600;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;
+  display:flex;align-items:center;justify-content:space-between;
 }
-.section-title::before{
+.section-title-left{display:flex;align-items:center;gap:8px}
+.section-title-left::before{
   content:"";width:4px;height:16px;background:var(--accent);border-radius:2px;
 }
+.section-title .more{font-size:12px;color:var(--text-3);font-weight:400}
 /* Manual cards */
 .manual-grid{
   display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
@@ -90,14 +93,13 @@ body{
   box-shadow:var(--shadow);position:relative;overflow:hidden;
 }
 .manual-card:active{transform:scale(0.97)}
-.manual-card:hover{box-shadow:var(--shadow-lg)}
 .manual-icon{
   width:44px;height:44px;border-radius:12px;
   display:flex;align-items:center;justify-content:center;
   font-size:24px;margin-bottom:10px;
 }
-.manual-card h3{font-size:15px;font-weight:600;margin-bottom:4px}
-.manual-card p{font-size:12px;color:var(--text-3);margin-bottom:8px;line-height:1.4}
+.manual-card h3{font-size:15px;font-weight:600;margin-bottom:4px;line-height:1.3}
+.manual-card p{font-size:12px;color:var(--text-3);margin-bottom:8px;line-height:1.4;height:34px;overflow:hidden}
 .manual-meta{
   display:flex;align-items:center;gap:6px;
   font-size:11px;color:var(--text-3);
@@ -109,32 +111,16 @@ body{
 }
 .badge-active{background:var(--success-light);color:var(--success)}
 .badge-draft{background:var(--warning-light);color:var(--warning)}
-.badge-soon{background:var(--primary-light);color:var(--primary)}
+.badge-new{background:var(--danger-light);color:var(--danger)}
 /* Color variants */
-.manual-card.truck .manual-icon{background:linear-gradient(135deg,#005cbf,#003d7a);color:#fff}
-.manual-card.coal .manual-icon{background:linear-gradient(135deg,#5c4033,#3d2817);color:#fff}
-.manual-card.hr .manual-icon{background:linear-gradient(135deg,#009688,#00695c);color:#fff}
-.manual-card.safety .manual-icon{background:linear-gradient(135deg,#ff6f00,#e65100);color:#fff}
-.manual-card.equip .manual-icon{background:linear-gradient(135deg,#6a1b9a,#4a148c);color:#fff}
-.manual-card.custom .manual-icon{background:linear-gradient(135deg,#546e7a,#37474f);color:#fff}
-/* Add card */
-.add-card{
-  border:2px dashed var(--border);background:transparent;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:140px;color:var(--text-3);
-}
-.add-card .plus{font-size:32px;margin-bottom:6px;font-weight:300}
-.add-card span{font-size:13px}
-/* Footer */
-.footer{
-  text-align:center;padding:24px 20px 10px;
-  color:var(--text-3);font-size:11px;
-}
-.footer .brand{color:var(--primary);font-weight:600}
+.mc-truck .manual-icon{background:linear-gradient(135deg,#005cbf,#003d7a);color:#fff}
+.mc-coal .manual-icon{background:linear-gradient(135deg,#5c4033,#3d2817);color:#fff}
+.mc-hr .manual-icon{background:linear-gradient(135deg,#009688,#00695c);color:#fff}
+.mc-safety .manual-icon{background:linear-gradient(135deg,#ff6f00,#e65100);color:#fff}
+.mc-equip .manual-icon{background:linear-gradient(135deg,#6a1b9a,#4a148c);color:#fff}
+.mc-knowledge .manual-icon{background:linear-gradient(135deg,#00bcd4,#00838f);color:#fff}
 /* Search bar */
-.search-bar{
-  margin:-20px 0 20px;position:relative;z-index:5;
-}
+.search-bar{margin:-20px 0 20px;position:relative;z-index:5}
 .search-bar input{
   width:100%;height:44px;border:none;border-radius:12px;
   padding:0 16px 0 44px;font-size:14px;
@@ -146,7 +132,7 @@ body{
   position:absolute;left:14px;top:50%;transform:translateY(-50%);
   font-size:18px;color:var(--text-3);
 }
-/* Knowledge sections */
+/* Quick actions */
 .quick-actions{
   display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
   margin-bottom:24px;
@@ -180,14 +166,89 @@ body{
 .recent-title{font-size:14px;font-weight:500;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .recent-desc{font-size:12px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .recent-time{font-size:11px;color:var(--text-3);flex-shrink:0}
+/* Footer */
+.footer{
+  text-align:center;padding:24px 20px 10px;
+  color:var(--text-3);font-size:11px;
+}
+.footer .brand{color:var(--primary);font-weight:600}
+/* Modal */
+.modal-mask{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.5);z-index:1000;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-mask.show{display:flex}
+.modal-box{
+  background:var(--card);border-radius:16px;width:100%;max-width:400px;
+  max-height:80vh;overflow-y:auto;
+}
+.modal-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-header h3{font-size:16px;font-weight:600}
+.modal-close{font-size:22px;color:var(--text-3);cursor:pointer;line-height:1}
+.modal-body{padding:16px 20px}
+/* Knowledge submit form */
+.form-group{margin-bottom:16px}
+.form-group label{
+  display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:var(--text-2);
+}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--border);
+  border-radius:8px;font-size:14px;outline:none;
+  font-family:inherit;background:#fff;color:var(--text);
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--primary);
+}
+.form-group textarea{resize:vertical;min-height:80px}
+.btn-primary{
+  width:100%;padding:12px;border:none;border-radius:10px;
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+  color:#fff;font-size:15px;font-weight:600;cursor:pointer;
+  transition:transform .2s;
+}
+.btn-primary:active{transform:scale(0.98)}
+.btn-outline{
+  width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;
+  background:#fff;color:var(--text);font-size:14px;cursor:pointer;
+  margin-top:8px;
+}
+/* Manual list in modal */
+.manual-list-item{
+  padding:12px 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+}
+.manual-list-item:last-child{border-bottom:none}
+.manual-list-item:active{opacity:0.7}
+.mli-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.mli-info{flex:1}
+.mli-name{font-size:14px;font-weight:500;margin-bottom:2px}
+.mli-desc{font-size:12px;color:var(--text-3)}
+.mli-count{font-size:12px;color:var(--primary);font-weight:500}
+/* Toast */
+.toast{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(0,0,0,0.8);color:#fff;padding:12px 20px;
+  border-radius:8px;font-size:14px;z-index:2000;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
 
 <!-- Header -->
 <div class="app-header">
-  <div class="logo">二</div>
-  <h1>二勇知识库</h1>
+  <div class="logo">晟</div>
+  <h1>晟隆知识库</h1>
 </div>
 
 <!-- Hero -->
@@ -196,17 +257,17 @@ body{
   <div class="hero-title">知识<span>手册中心</span></div>
   <div class="hero-desc">专业知识系统化管理 · 随时查阅 · 持续更新</div>
   <div class="hero-stats">
-    <div class="stat-item">
-      <div class="stat-num" id="stat-total">1</div>
+    <div class="stat-item" onclick="showManualList()">
+      <div class="stat-num" id="stat-total">6</div>
       <div class="stat-label">本手册</div>
     </div>
-    <div class="stat-item">
-      <div class="stat-num">30+</div>
+    <div class="stat-item" onclick="showKnowledgeStats()">
+      <div class="stat-num" id="stat-kp">50+</div>
       <div class="stat-label">知识点</div>
     </div>
-    <div class="stat-item">
-      <div class="stat-num">100%</div>
-      <div class="stat-label">可用率</div>
+    <div class="stat-item" onclick="openSubmitKnowledge()">
+      <div class="stat-num">💡</div>
+      <div class="stat-label">我要投稿</div>
     </div>
   </div>
 </div>
@@ -221,32 +282,37 @@ body{
   </div>
 
   <!-- Quick actions -->
-  <div class="section-title">快捷操作</div>
+  <div class="section-title">
+    <div class="section-title-left">快捷操作</div>
+  </div>
   <div class="quick-actions">
-    <div class="quick-btn" onclick="alert('二勇已准备好接收新知识！\\n\\n请直接告诉我要添加的内容和属于哪本手册。')">
+    <div class="quick-btn" onclick="openSubmitKnowledge()">
       <div class="qb-icon">📝</div>
-      <div class="qb-label">添加知识</div>
+      <div class="qb-label">投稿知识</div>
     </div>
-    <div class="quick-btn" onclick="alert('二勇会根据你的需求\\n创建全新的手册分类。\\n\\n直接告诉我手册名称和用途即可。')">
+    <div class="quick-btn" onclick="showManualList()">
       <div class="qb-icon">📚</div>
-      <div class="qb-label">新手册</div>
+      <div class="qb-label">全部手册</div>
     </div>
-    <div class="quick-btn" onclick="alert('所有手册都已分类管理，\\n点击下方手册卡片进入查看。\\n\\n不同手册内容独立，互不干扰。')">
-      <div class="qb-icon">🗂️</div>
-      <div class="qb-label">分类管理</div>
+    <div class="quick-btn" onclick="showKnowledgeStats()">
+      <div class="qb-icon">📊</div>
+      <div class="qb-label">知识统计</div>
     </div>
-    <div class="quick-btn" onclick="alert('二勇助手随时在线！\\n\\n有任何问题直接说，\\n我会帮你查找资料、更新手册。')">
-      <div class="qb-icon">💬</div>
-      <div class="qb-label">联系二勇</div>
+    <div class="quick-btn" onclick="showPendingList()">
+      <div class="qb-icon">⏳</div>
+      <div class="qb-label">待审核</div>
     </div>
   </div>
 
   <!-- Manuals -->
-  <div class="section-title">全部手册</div>
+  <div class="section-title">
+    <div class="section-title-left">全部手册</div>
+    <span class="more" onclick="showManualList()">查看全部 ›</span>
+  </div>
   <div class="manual-grid" id="manualGrid">
 
-    <!-- Truck manual -->
-    <div class="manual-card truck" onclick="location.href='manuals/xcmg-truck/index.html'">
+    <!-- 徐工重卡维修手册 -->
+    <div class="manual-card mc-truck" onclick="gotoManual('xcmg-truck')">
       <span class="manual-badge badge-active">已上线</span>
       <div class="manual-icon">🚛</div>
       <h3>徐工电动重卡<br>维修手册</h3>
@@ -258,90 +324,107 @@ body{
       </div>
     </div>
 
-    <!-- Coal washing (placeholder) -->
-    <div class="manual-card coal" onclick="showComingSoon('洗煤厂维修手册')">
-      <span class="manual-badge badge-soon">待建</span>
+    <!-- 洗煤厂维修手册 -->
+    <div class="manual-card mc-coal" onclick="gotoManual('coal-wash')">
+      <span class="manual-badge badge-active">已上线</span>
       <div class="manual-icon">⛏️</div>
       <h3>洗煤厂<br>维修手册</h3>
-      <p>洗煤设备维护与故障处理</p>
+      <p>机修班组 · 电工班组 · 设备维护</p>
       <div class="manual-meta">
-        <span>待创建</span>
+        <span>2 大班组</span>
         <span class="dot"></span>
-        <span>可随时启动</span>
+        <span>新建</span>
       </div>
     </div>
 
-    <!-- Onboarding (placeholder) -->
-    <div class="manual-card hr" onclick="showComingSoon('新人入职手册')">
-      <span class="manual-badge badge-soon">待建</span>
+    <!-- 新人入职手册 -->
+    <div class="manual-card mc-hr" onclick="gotoManual('onboarding')">
+      <span class="manual-badge badge-active">已上线</span>
       <div class="manual-icon">👤</div>
       <h3>新人入职<br>手册</h3>
-      <p>公司制度、流程与文化指南</p>
+      <p>办公室员工 · 一线员工入职指南</p>
       <div class="manual-meta">
-        <span>待创建</span>
+        <span>2 类岗位</span>
         <span class="dot"></span>
-        <span>可随时启动</span>
+        <span>新建</span>
       </div>
     </div>
 
-    <!-- Safety (placeholder) -->
-    <div class="manual-card safety" onclick="showComingSoon('安全生产手册')">
-      <span class="manual-badge badge-soon">待建</span>
+    <!-- 安全生产手册 -->
+    <div class="manual-card mc-safety" onclick="gotoManual('safety')">
+      <span class="manual-badge badge-active">已上线</span>
       <div class="manual-icon">🛡️</div>
       <h3>安全生产<br>手册</h3>
-      <p>安全规范与应急处理流程</p>
+      <p>生产安全 · 消防安全 · 洗煤厂安全</p>
       <div class="manual-meta">
-        <span>待创建</span>
+        <span>3 大分类</span>
         <span class="dot"></span>
-        <span>可随时启动</span>
+        <span>新建</span>
       </div>
     </div>
 
-    <!-- Equipment (placeholder) -->
-    <div class="manual-card equip" onclick="showComingSoon('设备管理手册')">
-      <span class="manual-badge badge-soon">待建</span>
+    <!-- 设备管理手册 -->
+    <div class="manual-card mc-equip" onclick="gotoManual('equipment')">
+      <span class="manual-badge badge-new">新上线</span>
       <div class="manual-icon">⚙️</div>
       <h3>设备管理<br>手册</h3>
-      <p>设备台账、保养与点检规范</p>
+      <p>五鑫洗煤厂 · 各站台 · 多层级</p>
       <div class="manual-meta">
-        <span>待创建</span>
+        <span>5 个站点</span>
         <span class="dot"></span>
-        <span>可随时启动</span>
+        <span>多层级</span>
       </div>
     </div>
 
-    <!-- Add new -->
-    <div class="manual-card add-card" onclick="showComingSoon('新手册')">
-      <div class="plus">+</div>
-      <span>添加新手册</span>
+    <!-- 知识收集 -->
+    <div class="manual-card mc-knowledge" onclick="openSubmitKnowledge()">
+      <span class="manual-badge badge-draft">开放投稿</span>
+      <div class="manual-icon">💡</div>
+      <h3>知识<br>收集箱</h3>
+      <p>员工建议 · 待审核 · 知识众筹</p>
+      <div class="manual-meta">
+        <span>人人可提交</span>
+        <span class="dot"></span>
+        <span>审核后入库</span>
+      </div>
     </div>
 
   </div>
 
   <!-- Recent updates -->
-  <div class="section-title" style="margin-top:24px">最近更新</div>
+  <div class="section-title" style="margin-top:24px">
+    <div class="section-title-left">最近更新</div>
+  </div>
   <div class="recent-list">
-    <div class="recent-item" onclick="location.href='manuals/xcmg-truck/index.html'">
+    <div class="recent-item" onclick="gotoManual('coal-wash')">
+      <div class="recent-icon" style="background:linear-gradient(135deg,#5c4033,#3d2817);color:#fff">⛏️</div>
+      <div class="recent-info">
+        <div class="recent-title">洗煤厂维修手册上线</div>
+        <div class="recent-desc">机修班组 · 电工班组 两大分类</div>
+      </div>
+      <div class="recent-time">今日</div>
+    </div>
+    <div class="recent-item" onclick="gotoManual('equipment')">
+      <div class="recent-icon" style="background:linear-gradient(135deg,#6a1b9a,#4a148c);color:#fff">⚙️</div>
+      <div class="recent-info">
+        <div class="recent-title">设备管理手册多层级架构</div>
+        <div class="recent-desc">五鑫一厂二厂 · 各站台设备</div>
+      </div>
+      <div class="recent-time">今日</div>
+    </div>
+    <div class="recent-item" onclick="gotoManual('safety')">
+      <div class="recent-icon" style="background:linear-gradient(135deg,#ff6f00,#e65100);color:#fff">🛡️</div>
+      <div class="recent-info">
+        <div class="recent-title">安全手册新增洗煤厂专项</div>
+        <div class="recent-desc">生产安全 · 消防安全</div>
+      </div>
+      <div class="recent-time">今日</div>
+    </div>
+    <div class="recent-item" onclick="gotoManual('xcmg-truck')">
       <div class="recent-icon" style="background:linear-gradient(135deg,#005cbf,#003d7a);color:#fff">🚛</div>
       <div class="recent-info">
         <div class="recent-title">低压电气系统故障维修</div>
-        <div class="recent-desc">徐工电动重卡维修手册 · 新增章节</div>
-      </div>
-      <div class="recent-time">今日</div>
-    </div>
-    <div class="recent-item" onclick="location.href='manuals/xcmg-truck/index.html'">
-      <div class="recent-icon" style="background:linear-gradient(135deg,#005cbf,#003d7a);color:#fff">🚛</div>
-      <div class="recent-info">
-        <div class="recent-title">新能源三电系统组成</div>
-        <div class="recent-desc">徐工电动重卡维修手册 · 更新内容</div>
-      </div>
-      <div class="recent-time">今日</div>
-    </div>
-    <div class="recent-item" onclick="location.href='manuals/xcmg-truck/index.html'">
-      <div class="recent-icon" style="background:linear-gradient(135deg,#005cbf,#003d7a);color:#fff">🚛</div>
-      <div class="recent-info">
-        <div class="recent-title">多合一内部结构与原理</div>
-        <div class="recent-desc">徐工电动重卡维修手册 · 更新内容</div>
+        <div class="recent-desc">徐工电动重卡维修手册</div>
       </div>
       <div class="recent-time">昨日</div>
     </div>
@@ -351,27 +434,258 @@ body{
 
 <!-- Footer -->
 <div class="footer">
-  <p><span class="brand">二勇知识库</span> · 专业知识管理助手</p>
-  <p style="margin-top:4px">持续更新 · 永不混淆 · 随时查阅</p>
+  <p><span class="brand">晟隆知识库</span> · 专业知识管理平台</p>
+  <p style="margin-top:4px">持续更新 · 分类管理 · 知识众筹</p>
 </div>
 
+<!-- 全部手册弹窗 -->
+<div class="modal-mask" id="manualListModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>全部手册</h3>
+      <span class="modal-close" onclick="closeModal('manualListModal')">×</span>
+    </div>
+    <div class="modal-body" id="manualListBody">
+      <!-- 动态填充 -->
+    </div>
+  </div>
+</div>
+
+<!-- 知识统计弹窗 -->
+<div class="modal-mask" id="statsModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>知识统计</h3>
+      <span class="modal-close" onclick="closeModal('statsModal')">×</span>
+    </div>
+    <div class="modal-body" id="statsBody">
+      <!-- 动态填充 -->
+    </div>
+  </div>
+</div>
+
+<!-- 投稿弹窗 -->
+<div class="modal-mask" id="submitModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>💡 知识投稿</h3>
+      <span class="modal-close" onclick="closeModal('submitModal')">×</span>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-3);margin-bottom:16px">
+        欢迎提交知识点建议！审核通过后将正式纳入对应手册。
+      </p>
+      <div class="form-group">
+        <label>投稿人</label>
+        <input type="text" id="submitName" placeholder="请输入您的姓名/班组">
+      </div>
+      <div class="form-group">
+        <label>归属手册</label>
+        <select id="submitManual">
+          <option value="">请选择手册</option>
+          <option value="xcmg-truck">徐工电动重卡维修手册</option>
+          <option value="coal-wash">洗煤厂维修手册</option>
+          <option value="onboarding">新人入职手册</option>
+          <option value="safety">安全生产手册</option>
+          <option value="equipment">设备管理手册</option>
+          <option value="other">其他（建议新手册）</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>知识点标题</label>
+        <input type="text" id="submitTitle" placeholder="简短描述知识点标题">
+      </div>
+      <div class="form-group">
+        <label>详细内容</label>
+        <textarea id="submitContent" placeholder="请详细描述知识点内容、操作步骤、注意事项等..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="submitKnowledge()">提交投稿</button>
+      <button class="btn-outline" onclick="closeModal('submitModal')">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 待审核列表弹窗 -->
+<div class="modal-mask" id="pendingModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>⏳ 待审核投稿</h3>
+      <span class="modal-close" onclick="closeModal('pendingModal')">×</span>
+    </div>
+    <div class="modal-body" id="pendingBody">
+      <p style="text-align:center;color:var(--text-3);padding:20px 0">暂无待审核投稿</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <script>
-// Coming soon modal
-function showComingSoon(name){
-  alert('📚 ' + name + '\\n\\n这本手册还在筹建中...\\n\\n告诉二勇你的需求，\\n马上就能安排上线！\\n\\n💬 直接对话输入需求即可');
+// 手册数据
+var manuals = [
+  {id:'xcmg-truck', name:'徐工电动重卡维修手册', icon:'🚛', color:'#005cbf', kp:30, status:'已上线', desc:'新能源重卡故障诊断与维修操作指南'},
+  {id:'coal-wash', name:'洗煤厂维修手册', icon:'⛏️', color:'#5c4033', kp:15, status:'已上线', desc:'机修班组 · 电工班组 · 设备维护'},
+  {id:'onboarding', name:'新人入职手册', icon:'👤', color:'#009688', kp:12, status:'已上线', desc:'办公室员工 · 一线员工入职指南'},
+  {id:'safety', name:'安全生产手册', icon:'🛡️', color:'#ff6f00', kp:20, status:'已上线', desc:'生产安全 · 消防安全 · 洗煤厂安全'},
+  {id:'equipment', name:'设备管理手册', icon:'⚙️', color:'#6a1b9a', kp:25, status:'新上线', desc:'五鑫洗煤厂 · 各站台设备台账'},
+  {id:'knowledge', name:'知识收集箱', icon:'💡', color:'#00bcd4', kp:0, status:'开放投稿', desc:'员工建议 · 待审核 · 知识众筹'}
+];
+
+// 跳转到手册
+function gotoManual(id){
+  var map = {
+    'xcmg-truck': 'manuals/xcmg-truck/index.html',
+    'coal-wash': 'manuals/coal-wash/index.html',
+    'onboarding': 'manuals/onboarding/index.html',
+    'safety': 'manuals/safety/index.html',
+    'equipment': 'manuals/equipment/index.html'
+  };
+  if(id === 'knowledge'){
+    openSubmitKnowledge();
+  } else if(map[id]){
+    location.href = map[id];
+  } else {
+    showToast('该手册正在建设中');
+  }
 }
 
-// Search
+// 显示手册列表弹窗
+function showManualList(){
+  var html = '';
+  manuals.forEach(function(m){
+    if(m.id === 'knowledge') return;
+    html += '<div class="manual-list-item" onclick="gotoManual(\'' + m.id + '\');closeModal(\'manualListModal\')">' +
+      '<div class="mli-icon" style="background:' + m.color + ';color:#fff">' + m.icon + '</div>' +
+      '<div class="mli-info">' +
+        '<div class="mli-name">' + m.name + '</div>' +
+        '<div class="mli-desc">' + m.desc + '</div>' +
+      '</div>' +
+      '<div class="mli-count">' + m.kp + '个知识点</div>' +
+    '</div>';
+  });
+  document.getElementById('manualListBody').innerHTML = html;
+  openModal('manualListModal');
+}
+
+// 显示知识统计
+function showKnowledgeStats(){
+  var totalKp = manuals.reduce(function(s,m){return s+m.kp;},0);
+  var html = '<div style="text-align:center;margin-bottom:20px">' +
+    '<div style="font-size:36px;font-weight:700;color:var(--primary)">' + totalKp + '+</div>' +
+    '<div style="font-size:13px;color:var(--text-3);margin-top:4px">总知识点数</div>' +
+  '</div>';
+  html += '<div style="font-size:14px;font-weight:600;margin-bottom:10px">各手册知识点分布</div>';
+  manuals.forEach(function(m){
+    if(m.id === 'knowledge') return;
+    var percent = Math.round((m.kp / totalKp) * 100);
+    html += '<div style="margin-bottom:12px">' +
+      '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">' +
+        '<span>' + m.icon + ' ' + m.name + '</span>' +
+        '<span style="color:var(--text-3)">' + m.kp + '个 (' + percent + '%)</span>' +
+      '</div>' +
+      '<div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden">' +
+        '<div style="height:100%;width:' + percent + '%;background:' + m.color + ';border-radius:3px"></div>' +
+      '</div>' +
+    '</div>';
+  });
+  document.getElementById('statsBody').innerHTML = html;
+  openModal('statsModal');
+}
+
+// 打开投稿
+function openSubmitKnowledge(){
+  document.getElementById('submitName').value = '';
+  document.getElementById('submitManual').value = '';
+  document.getElementById('submitTitle').value = '';
+  document.getElementById('submitContent').value = '';
+  openModal('submitModal');
+}
+
+// 提交知识
+function submitKnowledge(){
+  var name = document.getElementById('submitName').value.trim();
+  var manual = document.getElementById('submitManual').value;
+  var title = document.getElementById('submitTitle').value.trim();
+  var content = document.getElementById('submitContent').value.trim();
+  
+  if(!name){showToast('请填写投稿人');return}
+  if(!manual){showToast('请选择归属手册');return}
+  if(!title){showToast('请填写知识点标题');return}
+  if(!content){showToast('请填写详细内容');return}
+  
+  // 保存到本地
+  var pending = JSON.parse(localStorage.getItem('pending_knowledge') || '[]');
+  pending.unshift({
+    id: Date.now(),
+    name: name,
+    manual: manual,
+    title: title,
+    content: content,
+    time: new Date().toLocaleString('zh-CN'),
+    status: '待审核'
+  });
+  localStorage.setItem('pending_knowledge', JSON.stringify(pending));
+  
+  closeModal('submitModal');
+  showToast('✅ 投稿成功！等待审核');
+}
+
+// 显示待审核列表
+function showPendingList(){
+  var pending = JSON.parse(localStorage.getItem('pending_knowledge') || '[]');
+  var html = '';
+  if(pending.length === 0){
+    html = '<p style="text-align:center;color:var(--text-3);padding:30px 0">暂无待审核投稿<br><span style="font-size:12px">快去投稿你的第一条知识吧！</span></p>';
+  } else {
+    pending.forEach(function(item){
+      var manualName = manuals.find(function(m){return m.id===item.manual});
+      manualName = manualName ? manualName.name : item.manual;
+      html += '<div style="padding:12px 0;border-bottom:1px solid var(--border)">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
+          '<span style="font-size:14px;font-weight:500">' + item.title + '</span>' +
+          '<span style="font-size:11px;padding:2px 8px;background:var(--warning-light);color:var(--warning);border-radius:10px">' + item.status + '</span>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--text-3);margin-bottom:6px">' + manualName + ' · 投稿人：' + item.name + '</div>' +
+        '<div style="font-size:13px;color:var(--text-2);line-height:1.5">' + item.content.substring(0,60) + (item.content.length>60?'...':'') + '</div>' +
+        '<div style="font-size:11px;color:var(--text-3);margin-top:6px">' + item.time + '</div>' +
+      '</div>';
+    });
+  }
+  document.getElementById('pendingBody').innerHTML = html;
+  openModal('pendingModal');
+}
+
+// 弹窗控制
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+
+// 点击遮罩关闭
+document.querySelectorAll('.modal-mask').forEach(function(mask){
+  mask.addEventListener('click', function(e){
+    if(e.target === mask){mask.classList.remove('show')}
+  });
+});
+
+// Toast
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')}, 2000);
+}
+
+// 搜索
 document.getElementById('searchInput').addEventListener('input', function(e){
   var val = e.target.value.toLowerCase();
-  var cards = document.querySelectorAll('.manual-card:not(.add-card)');
+  var cards = document.querySelectorAll('.manual-card');
   cards.forEach(function(card){
     var text = card.textContent.toLowerCase();
     card.style.display = text.indexOf(val) > -1 ? '' : 'none';
   });
 });
 
-// Register service worker
+// 注册 Service Worker
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(function(){});
 }

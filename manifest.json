@@ -1,7 +1,7 @@
 {
-  "name": "二勇知识库",
-  "short_name": "二勇知识库",
-  "description": "专业知识手册管理平台 - 多手册分类管理，随时查阅",
+  "name": "晟隆知识库",
+  "short_name": "晟隆知识库",
+  "description": "晟隆集团专业知识手册管理平台",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
